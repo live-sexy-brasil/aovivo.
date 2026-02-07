@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="final-destination" id="final-destination" data-url="https://www.securegfm2.com/click">
+    <title>Bate-papo ao Vivo</title>
+    <style>
+        :root {
+            --font-family: 'Roboto', sans-serif;
+            --primary-button-color: #f97316;
+            --primary-button-hover-color: #e05a00;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-family); }
+        body { overflow: hidden; height: 100vh; width: 100vw; color: white; background: #111; }
+
+        #age-gate {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.3); z-index: 999;
+            display: flex; align-items: center; justify-content: center;
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+        }
+
+        h1 { font-size: 1.6rem; margin-bottom: 15px; font-weight: 700; }
+        p { font-size: 1.2rem; margin-bottom: 20px; line-height: 1.4; }
+
+        .content-container {
+            position: absolute; top: 50%; left: 50%; 
+            transform: translate(-50%, -50%);
+            text-align: center; 
+            background-color: rgba(17, 24, 39, 0.92);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            padding: 25px 15px;
+            border-radius: 20px; 
+            width: 95%; max-width: 380px; z-index: 1;
+        }
+
+        /* VOLTANDO AO FORMATO PADRÃO DO BOTÃO */
+        .button {
+            padding: 14px 20px; background-color: var(--primary-button-color);
+            color: white; border: 1px solid #e05a00; border-radius: 8px; /* Formato padrão */
+            font-size: 1.2rem; font-weight: 700; cursor: pointer;
+            width: 100%; text-transform: uppercase; margin: 10px 0;
+            display: flex; align-items: center; justify-content: center; gap: 12px;
+        }
+
+        /* ESTILO ESPECÍFICO PARA O ÍCONE (GIF) NO BOTÃO PROSSEGUIR */
+        .btn-gif-icon {
+            width: 38px; /* Aumentado conforme solicitado */
+            height: 38px;
+            border-radius: 10px; /* Cantos arredondados no ícone */
+            object-fit: cover;
+        }
+
+        .verified-list {
+            display: flex; flex-direction: column; align-items: center;
+            gap: 12px; margin: 20px 0; min-height: 150px;
+        }
+        .verified-item {
+            font-size: 1.2rem; font-weight: 900; color: #ffffff;
+            display: flex; align-items: center; gap: 10px;
+            animation: slideIn 0.4s forwards; opacity: 0;
+        }
+        .verified-item i { color: #4CAF50; font-size: 1.3rem; font-weight: bold; }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .video-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; }
+        .background-video { position: absolute; width: 100%; height: 100%; object-fit: cover; top: 0; left: 0; }
+        .overlay { position: fixed; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.3); z-index: 0; }
+
+        .intro-container {
+            position: relative; width: 100%; max-width: 140px; aspect-ratio: 9/16; 
+            margin: 0 auto 15px; border-radius: 10px; overflow: hidden; 
+            border: 2px solid rgba(255, 255, 255, 0.5); display: none; background: #000;
+        }
+        .intro-container video { width: 100%; height: 100%; object-fit: cover; }
+
+        .selection-buttons-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-bottom: 15px; }
+        .selection-image-button, .selection-video-button {
+            position: relative; aspect-ratio: 3/4; border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2); overflow: hidden; cursor: pointer;
+            background-size: cover; background-position: center;
+            display: flex; flex-direction: column; justify-content: flex-end;
+        }
+        .button-text { background: rgba(0,0,0,0.6); padding: 5px; font-size: 0.8rem; font-weight: 600; }
+
+        .loading-spinner { width: 45px; height: 45px; border: 5px solid rgba(255, 255, 255, 0.2); border-radius: 50%; border-top-color: #f97316; animation: spin 1s linear infinite; margin: 20px auto; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .load-item { color: #4CAF50; margin-bottom: 10px; animation: fadeIn 0.5s forwards; text-align: left; font-size: 1.1rem; font-weight: 900; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        #particles-js { position: fixed; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+        .nickname-input { width: 100%; padding: 15px; border-radius: 8px; border: 2px solid #f97316; background: rgba(255,255,255,0.1); color: white; font-size: 1.2rem; text-align: center; margin-bottom: 15px; outline: none; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+</head>
+<body>
+
+    <div id="age-gate">
+        <div class="content-container" style="position:relative; transform:none; top:0; left:0; border-color:#f97316;">
+            <h1>TEM MAIS DE 18 ANOS?</h1>
+            <button class="button" onclick="confirmAge()">Sim, eu confirmo</button>
+        </div>
+    </div>
+
+    <div id="main-content">
+        <div class="video-container">
+            <video id="portrait-video" class="background-video" autoplay loop muted playsinline src="https://dg-videos.b-cdn.net/bg/720x1280_cm_bg320.mp4"></video>
+            <video id="landscape-video" class="background-video" autoplay loop muted playsinline src="https://dg-videos.b-cdn.net/bg/1280x720_cm_bg320.mp4"></video>
+        </div>
+        <div id="particles-js"></div>
+        <div class="overlay"></div>
+        <div class="content-container">
+            <div class="intro-container" id="intro-container">
+                <video id="intro-video-element" loop muted playsinline>
+                    <source src="https://dg-videos.b-cdn.net/bg/720x1280_cm562.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div id="step-content"></div>
+            <div id="buttons-container"></div>
+        </div>
+    </div>
+
+    <script>
+        const finalUrl = document.getElementById('final-destination').dataset.url;
+        let userChoices = []; 
+        const steps = [
+            { id: 0, title: "Diversão ao Vivo", question: "Você aceita uma chamada de vídeo particular?", buttonText: "Começar Agora" },
+            { id: 1, tag: "PREFERÊNCIA", question: "PREFERÊNCIA?", btnText: ["Novinha", "Madura", "Grandona", "Morena"], media: ["teen4", "milf3", "bbw2", "ebony2"] },
+            { id: 2, tag: "CABELOS", question: "CABELOS?", btnText: ["Morena", "Loira", "Ruiva", "Outro"], media: ["brunette1", "blonde2", "redhead3", "other2"] },
+            { id: 3, tag: "SEIOS", question: "Qual tamanho de seios?", btnText: ["Pequenos", "Médios", "Grandes", "Enormes"], media: ["small3", "medium2", "medium1", "huge4"] },
+            { id: 4, tag: "DEPILAÇÃO", question: "DEPILAÇÃO?", btnText: ["Lisinha", "Aparada", "Peluda", "Natural"], media: ["shaved2", "trimmed2", "hairy1", "natural2"] },
+            { id: 5, tag: "OBJETIVO", question: "VOCÊ PRETENDE?", btnText: ["Me Masturbar", "Apenas Conversar"] },
+            { id: 6, tag: "GEMIDOS", question: "Deseja que a Modelo Gema chamando seu NOME?", btnText: ["Sim", "Não"] },
+            { id: 7, type: "input", tag: "APELIDO", question: "Escreva seu APELIDO:", buttonText: "Salvar Apelido" },
+            { id: 8, tag: "NUDEZ", question: "Deseja que ela tire toda a roupa?", btnText: ["Sim", "Não"] },
+            { id: 9, tag: "BRINCADEIRA", question: "Com o que ela deve brincar?", btnText: ["Peitos", "Bucetinha", "Cuzinho", "Dança (TikTok)"], vids: ["tits1", "pussy1", "ass2", "dance1"] },
+            { id: 10, type: "confirm", title: "CONFIRME SUAS PREFERÊNCIAS", buttonText: "Prosseguir" },
+            { id: 11, type: "loading", messages: ["Analisando perfil...", "Conectando modelo...", "Acesso Liberado!"] },
+            { id: 12, title: "Pronto!", question: "Clique abaixo para entrar na sala privada.", buttonText: "Entrar na Live" }
+        ];
+
+        let currentStep = 0;
+
+        function confirmAge() {
+            document.getElementById('age-gate').style.display = 'none';
+            const introVid = document.getElementById('intro-video-element');
+            if(introVid) introVid.play();
+            renderStep(0);
+        }
+
+        function renderStep(idx) {
+            const step = steps[idx];
+            const content = document.getElementById('step-content');
+            const btns = document.getElementById('buttons-container');
+            const intro = document.getElementById('intro-container');
+
+            intro.style.display = idx === 0 ? 'block' : 'none';
+            content.innerHTML = step.title ? `<h1>${step.title}</h1>` : '';
+            content.innerHTML += `<p>${step.question || ''}</p>`;
+            btns.innerHTML = '';
+
+            if (step.type === "confirm") {
+                btns.innerHTML = `<div id="v-list" class="verified-list"></div>`;
+                const list = document.getElementById('v-list');
+                const validChoices = userChoices.filter(c => c.a.toLowerCase() !== "não");
+                
+                let i = 0;
+                const interval = setInterval(() => {
+                    if (i < validChoices.length) {
+                        const item = document.createElement('div');
+                        item.className = 'verified-item';
+                        let text = validChoices[i].a;
+                        if (text.toLowerCase() === "sim") {
+                            text = (validChoices[i].q.includes("Gema")) ? "GEMIDOS" : "NUDEZ";
+                        }
+                        item.innerHTML = `<i>✓</i> ${text.toUpperCase()}`;
+                        list.appendChild(item);
+                        i++;
+                    } else {
+                        clearInterval(interval);
+                        const b = document.createElement('button');
+                        b.className = 'button';
+                        // GIF maior e arredondado
+                        b.innerHTML = `${step.buttonText} <img src="https://cdn-icons-gif.flaticon.com/16767/16767287.gif" class="btn-gif-icon">`;
+                        b.onclick = next;
+                        btns.appendChild(b);
+                    }
+                }, 600);
+            }
+            else if (step.type === "loading") {
+                btns.innerHTML = `<div class="loading-spinner"></div><div id="loading-list"></div>`;
+                const lList = document.getElementById('loading-list');
+                let m = 0;
+                const interval = setInterval(() => {
+                    if(m < step.messages.length) {
+                        const item = document.createElement('div');
+                        item.className = 'load-item';
+                        item.innerText = "✓ " + step.messages[m];
+                        lList.appendChild(item);
+                        m++;
+                    } else { clearInterval(interval); setTimeout(next, 1000); }
+                }, 1200);
+            } 
+            else if (step.type === "input") {
+                btns.innerHTML = `<input type="text" id="nick" class="nickname-input" placeholder="Ex: João" oninput="forceAt(this)">`;
+                const b = document.createElement('button');
+                b.className = 'button';
+                b.innerText = step.buttonText;
+                b.onclick = () => {
+                    const val = document.getElementById('nick').value || "@Anônimo";
+                    saveChoice(idx, step.tag, val);
+                };
+                btns.appendChild(b);
+            }
+            else if (step.media || step.vids) {
+                let grid = `<div class="selection-buttons-container">`;
+                const assets = step.media || step.vids;
+                const isVid = !!step.vids;
+                step.btnText.forEach((t, i) => {
+                    if (isVid) {
+                        grid += `<div class="selection-video-button" onclick="saveChoice(${idx}, '${step.tag}', '${t}')"><video autoplay loop muted playsinline style="width:100%; height:100%; object-fit:cover;"><source src="https://dg-videos.b-cdn.net/bg/cm80/150x200_${assets[i]}.mp4"></video><div class="button-text">${t}</div></div>`;
+                    } else {
+                        grid += `<div class="selection-image-button" onclick="saveChoice(${idx}, '${step.tag}', '${t}')" style="background-image:url('https://dg-videos.b-cdn.net/bg/cm80/300x400_${assets[i]}.jpg')"><div class="button-text">${t}</div></div>`;
+                    }
+                });
+                btns.innerHTML = grid + `</div>`;
+            }
+            else if (step.btnText) {
+                step.btnText.forEach(t => {
+                    const b = document.createElement('button');
+                    b.className = 'button';
+                    b.innerText = t;
+                    b.onclick = () => saveChoice(idx, step.tag, t);
+                    btns.appendChild(b);
+                });
+            }
+            else { addBtn(step.buttonText); }
+        }
+
+        function forceAt(el) { if (!el.value.startsWith('@')) el.value = '@' + el.value.replace(/@/g, ''); }
+        function saveChoice(idx, q, a) { userChoices.push({q: q, a: a}); next(); }
+        function addBtn(txt) {
+            const b = document.createElement('button'); b.className = 'button';
+            b.innerText = txt; b.onclick = next; document.getElementById('buttons-container').appendChild(b);
+        }
+        window.next = () => { if (currentStep < steps.length - 1) { currentStep++; renderStep(currentStep); } else { window.location.href = finalUrl; } };
+        particlesJS("particles-js", { particles: { number: { value: 30 }, size: { value: 1.5 }, line_linked: { enable: false }, move: { speed: 1 } } });
+    </script>
+</body>
+</html>
