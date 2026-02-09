@@ -32,7 +32,22 @@
         .overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.4); z-index: 2; pointer-events: none; }
         #particles-js { position: fixed; inset: 0; z-index: 3; }
         #age-gate { position: fixed; inset: 0; z-index: 999; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); background: rgba(0,0,0,0.3); }
-        .content-container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; background-color: rgba(17, 24, 39, 0.92); border: 2px solid rgba(255, 255, 255, 0.2); padding: 25px 15px; border-radius: 20px; width: 95%; max-width: 380px; z-index: 10; }
+        
+        /* Container principal centralizado */
+        .content-container { 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            text-align: center; 
+            background-color: rgba(17, 24, 39, 0.35); /* 35% de opacidade */
+            border: 2px solid rgba(255, 255, 255, 0.2); 
+            padding: 25px 15px; 
+            border-radius: 20px; 
+            width: 95%; 
+            max-width: 380px; 
+            z-index: 10; 
+        }
 
         /* --- ELEMENTOS VISUAIS --- */
         .bg-video { position: absolute; width: 100%; height: 100%; object-fit: cover; }
@@ -40,8 +55,22 @@
         .mobile { display: none; }
         @media (max-width: 768px) { .desktop { display: none; } .mobile { display: block; } }
 
-        h1 { font-size: 1.6rem; margin-bottom: 15px; font-weight: 700; }
-        p { font-size: 1.2rem; margin-bottom: 20px; line-height: 1.4; }
+        /* Textos em negrito e branco */
+        h1 { 
+            font-size: 1.6rem; 
+            margin-bottom: 15px; 
+            font-weight: 900; /* Mais negrito */
+            color: white !important; 
+            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+        }
+        p { 
+            font-size: 1.2rem; 
+            margin-bottom: 20px; 
+            line-height: 1.4; 
+            font-weight: 700; /* Negrito */
+            color: white !important;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.7);
+        }
 
         .button {
             padding: 14px 20px; background-color: var(--primary-button-color);
@@ -54,12 +83,66 @@
         .button:active { transform: scale(0.96); }
         .btn-gif-icon { width: 38px; height: 38px; border-radius: 10px; object-fit: cover; }
 
-        .selection-buttons-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-bottom: 15px; }
-        .selection-image-button, .selection-video-button { position: relative; aspect-ratio: 3/4; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.2); overflow: hidden; cursor: pointer; background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: flex-end; }
-        .button-text { background: rgba(0,0,0,0.6); padding: 5px; font-size: 0.8rem; font-weight: 600; }
+        .selection-buttons-container { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 10px; 
+            width: 100%; 
+            margin-bottom: 15px; 
+        }
+        .selection-image-button, .selection-video-button { 
+            position: relative; 
+            aspect-ratio: 3/4; 
+            border-radius: 12px; 
+            border: 1px solid rgba(255, 255, 255, 0.2); 
+            overflow: hidden; 
+            cursor: pointer; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: flex-end; 
+            background-color: rgba(0,0,0,0.3); /* Fundo para contraste */
+        }
+        
+        /* Imagens 30% menores */
+        .selection-image-button {
+            background-size: 70%; /* 30% menor */
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        /* Vídeos 30% menores */
+        .selection-video-button video {
+            width: 70%;
+            height: 70%;
+            object-fit: cover;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 8px;
+        }
+        
+        .button-text { 
+            background: rgba(0,0,0,0.6); 
+            padding: 5px; 
+            font-size: 0.8rem; 
+            font-weight: 600; 
+            z-index: 2;
+            position: relative;
+            margin-top: auto;
+        }
 
         .verified-list { display: flex; flex-direction: column; align-items: center; gap: 12px; margin: 20px 0; min-height: 150px; }
-        .verified-item { font-size: 1.2rem; font-weight: 900; display: flex; align-items: center; gap: 10px; animation: slideIn 0.4s forwards; opacity: 0; }
+        .verified-item { 
+            font-size: 1.2rem; 
+            font-weight: 900; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            animation: slideIn 0.4s forwards; 
+            opacity: 0; 
+            color: white;
+        }
         .verified-item i { color: #4CAF50; font-style: normal; }
 
         @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -67,18 +150,57 @@
         .loading-spinner { width: 45px; height: 45px; border: 5px solid rgba(255, 255, 255, 0.2); border-radius: 50%; border-top-color: #f97316; animation: spin 1s linear infinite; margin: 20px auto; }
         @keyframes spin { to { transform: rotate(360deg); } }
         
-        .load-item { color: #4CAF50; margin-bottom: 10px; animation: fadeIn 0.5s forwards; text-align: left; font-size: 1.1rem; font-weight: 900; }
+        .load-item { 
+            color: #4CAF50; 
+            margin-bottom: 10px; 
+            animation: fadeIn 0.5s forwards; 
+            text-align: left; 
+            font-size: 1.1rem; 
+            font-weight: 900; 
+        }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        .nickname-input { width: 100%; padding: 15px; border-radius: 8px; border: 2px solid #f97316; background: rgba(255,255,255,0.1); color: white; font-size: 1.2rem; text-align: center; margin-bottom: 15px; outline: none; }
-        .intro-container { position: relative; width: 100%; max-width: 140px; aspect-ratio: 9/16; margin: 0 auto 15px; border-radius: 10px; overflow: hidden; border: 2px solid rgba(255, 255, 255, 0.5); display: none; background: #000; }
+        .nickname-input { 
+            width: 100%; 
+            padding: 15px; 
+            border-radius: 8px; 
+            border: 2px solid #f97316; 
+            background: rgba(255,255,255,0.1); 
+            color: white; 
+            font-size: 1.2rem; 
+            text-align: center; 
+            margin-bottom: 15px; 
+            outline: none; 
+            font-weight: 700;
+        }
+        .intro-container { 
+            position: relative; 
+            width: 100%; 
+            max-width: 140px; 
+            aspect-ratio: 9/16; 
+            margin: 0 auto 15px; 
+            border-radius: 10px; 
+            overflow: hidden; 
+            border: 2px solid rgba(255, 255, 255, 0.5); 
+            display: none; 
+            background: #000; 
+        }
         .intro-container video { width: 100%; height: 100%; object-fit: cover; }
+        
+        /* Ajustes para centralização do age-gate */
+        #age-gate .content-container {
+            position: relative;
+            transform: none;
+            top: 0;
+            left: 0;
+            margin: auto;
+        }
     </style>
 </head>
 <body>
 
     <div id="age-gate">
-        <div class="content-container" style="position:relative; transform:none; top:0; left:0; border-color:#f97316;">
+        <div class="content-container">
             <h1>TEM MAIS DE 18 ANOS?</h1>
             <button class="button" onclick="confirmAge()">Sim, eu confirmo</button>
         </div>
@@ -216,7 +338,7 @@
                 step.btnText.forEach((t, i) => {
                     const mediaSrc = isVid ? `https://dg-videos.b-cdn.net/bg/cm80/150x200_${assets[i]}.mp4` : `https://dg-videos.b-cdn.net/bg/cm80/300x400_${assets[i]}.jpg`;
                     if (isVid) {
-                        grid += `<div class="selection-video-button" onclick="saveChoice(${idx}, '${step.tag}', '${t}')"><video autoplay loop muted playsinline style="width:100%; height:100%; object-fit:cover;"><source src="${mediaSrc}"></video><div class="button-text">${t}</div></div>`;
+                        grid += `<div class="selection-video-button" onclick="saveChoice(${idx}, '${step.tag}', '${t}')"><video autoplay loop muted playsinline><source src="${mediaSrc}"></video><div class="button-text">${t}</div></div>`;
                     } else {
                         grid += `<div class="selection-image-button" onclick="saveChoice(${idx}, '${step.tag}', '${t}')" style="background-image:url('${mediaSrc}')"><div class="button-text">${t}</div></div>`;
                     }
