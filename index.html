@@ -31,21 +31,20 @@
         .video-container { position: fixed; inset: 0; z-index: 1; overflow: hidden; }
         .overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.4); z-index: 2; pointer-events: none; }
         #particles-js { position: fixed; inset: 0; z-index: 3; }
-        #age-gate { position: fixed; inset: 0; z-index: 999; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); background: rgba(0,0,0,0.3); }
         .content-container { 
             position: absolute; 
             top: 50%; 
             left: 50%; 
             transform: translate(-50%, -50%); 
             text-align: center; 
-            background-color: rgba(17, 24, 39, 0.5); /* 50% transparente */
-            border: 2px solid rgba(255, 255, 255, 0.3); /* borda mais visível para contraste */
+            background-color: rgba(17, 24, 39, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.3);
             padding: 25px 15px; 
             border-radius: 20px; 
             width: 95%; 
-            max-width: 420px; /* um pouco maior para comportar fonte maior */
+            max-width: 420px;
             z-index: 10; 
-            backdrop-filter: blur(2px); /* suaviza a transparência */
+            backdrop-filter: blur(2px);
         }
 
         /* --- ELEMENTOS VISUAIS --- */
@@ -54,7 +53,6 @@
         .mobile { display: none; }
         @media (max-width: 768px) { .desktop { display: none; } .mobile { display: block; } }
 
-        /* Fonte maior */
         h1 { font-size: 2.2rem; margin-bottom: 15px; font-weight: 700; line-height: 1.2; }
         p { font-size: 1.6rem; margin-bottom: 20px; line-height: 1.4; }
         @media (max-width: 480px) {
@@ -83,7 +81,6 @@
 
         @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Barra de progresso animada (substitui o spinner) */
         .progress-bar-container {
             width: 100%;
             height: 12px;
@@ -127,13 +124,6 @@
     </style>
 </head>
 <body>
-
-    <div id="age-gate">
-        <div class="content-container" style="position:relative; transform:none; top:0; left:0; border-color:#f97316;">
-            <h1>TEM MAIS DE 18 ANOS?</h1>
-            <button class="button" onclick="confirmAge()">Sim, eu confirmo</button>
-        </div>
-    </div>
 
     <div class="video-container">
         <video class="bg-video desktop" poster="https://dg-videos.b-cdn.net/bg/img/1280x720_cm_bg320.jpg" autoplay loop muted playsinline>
@@ -194,13 +184,6 @@
             { id: 12, title: "Pronto!", question: "Clique abaixo para entrar na sala privada.", buttonText: "Entrar na Live" }
         ];
 
-        function confirmAge() {
-            document.getElementById('age-gate').style.display = 'none';
-            const introVid = document.getElementById('intro-video-element');
-            if(introVid) introVid.play();
-            renderStep(0);
-        }
-
         function renderStep(idx) {
             const step = steps[idx];
             const content = document.getElementById('step-content');
@@ -236,7 +219,6 @@
                 }, 600);
             }
             else if (step.type === "loading") {
-                // Barra de progresso + lista
                 btns.innerHTML = `
                     <div class="progress-bar-container">
                         <div id="progress-bar-fill" class="progress-bar-fill" style="width:0%"></div>
@@ -254,7 +236,6 @@
                         item.innerText = "✓ " + step.messages[m];
                         lList.appendChild(item);
                         m++;
-                        // Atualiza a barra de progresso
                         const percent = (m / total) * 100;
                         progressBar.style.width = percent + '%';
                     } else { 
@@ -315,7 +296,7 @@
                 currentStep++;
                 renderStep(currentStep);
             } else {
-                if(g2) $.get(g2); // Executa o postback
+                if(g2) $.get(g2);
                 window.location.href = finalUrl;
             }
         };
@@ -413,11 +394,15 @@
             },
             "retina_detect": true
         });
+
+        // Iniciar o fluxo automaticamente (age gate removido)
+        $(function() {
+            const introVid = document.getElementById('intro-video-element');
+            if (introVid) {
+                introVid.play().catch(e => console.log('Autoplay do intro vídeo falhou:', e));
+            }
+            renderStep(0);
+        });
     </script>
 </body>
 </html>
-
-
-
-
-
